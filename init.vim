@@ -61,6 +61,10 @@ Plug 'nvim-lualine/lualine.nvim'
 
 Plug 'nvim-tree/nvim-web-devicons' "ptional, for file icons
 Plug 'nvim-tree/nvim-tree.lua'      "gestorArchivos
+
+Plug 'windwp/nvim-autopairs' "autopais
+Plugin 'alvan/vim-closetag' "autoclose
+
 call plug#end()
 
 
@@ -99,6 +103,32 @@ set completeopt=menu,menuone,noselect
 lua << EOF
 require'lspconfig'.tsserver.setup{}
 EOF
+
+"AUTO PAIRS CONFIG
+lua << EOF
+require("nvim-autopairs").setup {
+check_ts = true,
+ts_config = {
+        lua = {'string'},-- it will not add a pair on that treesitter node
+        javascript = {'template_string'},
+        java = false,-- don't check treesitter on java
+    },
+    fast_wrap = {
+      map = '<M-e>',
+      chars = { '{', '[', '(', '"', "'" },
+      pattern = [=[[%'%"%>%]%)%}%,]]=],
+      end_key = '$',
+      keys = 'qwertyuiopzxcvbnmasdfghjkl',
+      check_comma = true,
+      highlight = 'Search',
+      highlight_grey='Comment'
+    },
+    
+
+
+}
+EOF
+
 
 lua << EOF
   -- Set up nvim-cmp.
@@ -295,7 +325,53 @@ require('lualine').setup {
   extensions = {}
 }
 END
+
+
+" filenames like *.xml, *.html, *.xhtml, ...
+" These are the file extensions where this plugin is enabled.
+"
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
+
+" filenames like *.xml, *.xhtml, ...
+" This will make the list of non-closing tags self-closing in the specified files.
+"
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
+
+" filetypes like xml, html, xhtml, ...
+" These are the file types where this plugin is enabled.
+"
+let g:closetag_filetypes = 'html,xhtml,phtml'
+
+" filetypes like xml, xhtml, ...
+" This will make the list of non-closing tags self-closing in the specified files.
+"
+let g:closetag_xhtml_filetypes = 'xhtml,jsx'
+
+" integer value [0|1]
+" This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
+"
+let g:closetag_emptyTags_caseSensitive = 1
+
+" dict
+" Disables auto-close if not in a "valid" region (based on filetype)
+"
+let g:closetag_regions = {
+    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+    \ 'javascript.jsx': 'jsxRegion',
+    \ 'typescriptreact': 'jsxRegion,tsxRegion',
+    \ 'javascriptreact': 'jsxRegion',
+    \ }
+
+let g:closetag_shortcut = '>'
+
+let g:closetag_close_shortcut = '<leader>>'
+
+let g:closetag_enable_react_fragment = 1
+
+let g:closetag_enable_react_fragment = 0
+
 " }}}
+
 
 
 
